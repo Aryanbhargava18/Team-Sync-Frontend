@@ -1,10 +1,10 @@
 import { CustomError } from "@/types/custom-error.type";
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+// const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const options = {
-  baseURL,
+    baseURL: "https://team-sync-bankend.onrender.com/api",
   withCredentials: true,
   timeout: 10000,
 };
