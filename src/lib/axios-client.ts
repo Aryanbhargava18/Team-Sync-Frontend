@@ -12,23 +12,28 @@ const options = {
 const API = axios.create(options);
 
 API.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   async (error) => {
-    const { data, status } = error.response;
+    const response = error.response;
+    if (response) {
+      const { data, status } = response;
 
-    if (data === "Unauthorized" && status === 401) {
-      window.location.href = "/";
+      if (data === "Unauthorized" && status === 401) {
+        window.location.href = "/";
+      }
+
+      const customError: CustomError = {
+        ...error,
+        errorCode: data?.errorCode || "UNKNOWN_ERROR",
+      };
+
+      return Promise.reject(customError);
     }
 
-    const customError: CustomError = {
-      ...error,
-      errorCode: data?.errorCode || "UNKNOWN_ERROR",
-    };
-
-    return Promise.reject(customError);
+    // Handle errors without response (network errors, etc.)
+    return Promise.reject(error);
   }
 );
+
 
 export default API;
